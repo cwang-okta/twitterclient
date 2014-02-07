@@ -7,11 +7,28 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "User.h"
 
 @interface Tweet : RestObject
 
-@property (nonatomic, strong, readonly) NSString *text;
-
 + (NSMutableArray *)tweetsWithArray:(NSArray *)array;
+
+- (void)toggleRetweeted;
+- (void)toggleFavorited;
+
+@property (nonatomic, strong) User *user;
+@property (nonatomic, strong) NSString *tweetId;
+@property (nonatomic, strong) NSString *currentUserRetweetId;
+@property (nonatomic, strong) NSString *tweetText;
+@property (nonatomic, strong) NSString *retweeterUsername;
+@property (nonatomic, assign) NSInteger retweetCount;
+@property (nonatomic, assign) NSInteger favoriteCount;
+
+@property (nonatomic, assign) BOOL retweeted;
+@property (nonatomic, assign) BOOL favorited;
+@property (nonatomic, assign) BOOL replied;
+
+@property (nonatomic, strong, readonly) NSString *timeAgo;
+@property (nonatomic, strong, readonly) NSString *timestamp;
 
 @end

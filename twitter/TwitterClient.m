@@ -54,15 +54,52 @@ static NSString * const kAccessTokenKey = @"kAccessTokenKey";
 
 #pragma mark - Statuses API
 
-- (void)homeTimelineWithCount:(int)count sinceId:(int)sinceId maxId:(int)maxId success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"count": @(count)}];
-    if (sinceId > 0) {
-        [params setObject:@(sinceId) forKey:@"since_id"];
+- (void)homeTimelineWithCount:(int)count sinceId:(NSString *)sinceId maxId:(NSString *)maxId success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"count": @(count), @"include_my_retweet": @"true"}];
+    if (sinceId != nil) {
+        [params setObject:sinceId forKey:@"since_id"];
     }
-    if (maxId > 0) {
-        [params setObject:@(maxId) forKey:@"max_id"];
+    if (maxId != nil) {
+        [params setObject:maxId forKey:@"max_id"];
     }
     [self getPath:@"1.1/statuses/home_timeline.json" parameters:params success:success failure:failure];
+}
+
+- (void)tweetStatus:(NSString *)status success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"status": status}];
+    [self postPath:@"1.1/statuses/update.json" parameters:params success:success failure:failure];
+}
+
+- (void)replyToStatusId:(NSString *)statusId withStatus:(NSString *)status success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"status": status, @"in_reply_to_status_id": statusId}];
+    [self postPath:@"1.1/statuses/update.json" parameters:params success:success failure:failure];
+}
+
+- (void)retweetStatusId:(NSString *)statusId success:(void (^)(AFHTTPRequestOperation *, id))success failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id": statusId, @"trim_user" : @"true"}];
+    NSString *path = [NSString stringWithFormat:@"1.1/statuses/retweet/%@.json", statusId];
+    [self postPath:path parameters:params success:success failure:failure];
+}
+
+- (void)removeRetweetStatusId:(NSString *)statusId success:(void (^)(AFHTTPRequestOperation *, id))success failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+{
+    NSString *path = [NSString stringWithFormat:@"1.1/statuses/destroy/%@.json", statusId];
+    [self postPath:path parameters:nil success:success failure:failure];
+}
+
+- (void)favoriteStatusId:(NSString *)statusId success:(void (^)(AFHTTPRequestOperation *, id))success failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id": statusId}];
+    [self postPath:@"1.1/favorites/create.json" parameters:params success:success failure:failure];
+}
+
+- (void)unfavoriteStatusId:(NSString *)statusId success:(void (^)(AFHTTPRequestOperation *, id))success failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id": statusId}];
+    [self postPath:@"1.1/favorites/destroy.json" parameters:params success:success failure:failure];
 }
 
 #pragma mark - Private methods

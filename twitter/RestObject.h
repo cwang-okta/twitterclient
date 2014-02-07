@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RestObject : NSObject
+@interface RestObject : NSObject<NSCoding>
 
 - (id)initWithDictionary:(NSDictionary *)data;
 

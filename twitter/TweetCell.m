@@ -7,6 +7,12 @@
 //
 
 #import "TweetCell.h"
+#import "Tweet.h"
+#import "ComposeTweetVC.h"
+
+@interface TweetCell ()
+
+@end
 
 @implementation TweetCell
 
@@ -14,7 +20,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
+
     }
     return self;
 }
@@ -22,8 +28,30 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
 
-    // Configure the view for the selected state
+- (IBAction)replyToTweet:(id)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReplyToTweet"
+                                                        object:self.tweet
+                                                      userInfo:nil];
+}
+
+- (IBAction)retweet:(id)sender {
+    [self.tweet toggleRetweeted];
+    self.retweetButton.selected = self.tweet.retweeted;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Retweet"
+                                                        object:self.tweet
+                                                      userInfo:nil];
+}
+
+- (IBAction)favoriteTweet:(id)sender {
+    [self.tweet toggleFavorited];
+    self.favoriteButton.selected = self.tweet.favorited;
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Favorite"
+                                                        object:self.tweet
+                                                      userInfo:nil];
 }
 
 @end

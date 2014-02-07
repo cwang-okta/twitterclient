@@ -17,6 +17,17 @@ NSString * const kCurrentUserKey = @"kCurrentUserKey";
 
 static User *_currentUser;
 
+-(void)encodeWithCoder:(NSCoder *)encoder {
+    [super encodeWithCoder:encoder];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    self = [super initWithCoder:decoder];
+    if (self) {
+    }
+    return self;
+}
+
 + (User *)currentUser {
     if (!_currentUser) {
         NSData *userData = [[NSUserDefaults standardUserDefaults] dataForKey:kCurrentUserKey];
@@ -46,6 +57,21 @@ static User *_currentUser;
         _currentUser = currentUser; // Needs to be set before firing the notification
         [[NSNotificationCenter defaultCenter] postNotificationName:UserDidLogoutNotification object:nil];
     }
+}
+
+- (NSString *)name
+{
+    return self.data[@"name"];
+}
+
+- (NSString *)screenName
+{
+    return self.data[@"screen_name"];
+}
+
+- (NSString *)profileImageURL
+{
+    return self.data[@"profile_image_url"];
 }
 
 @end

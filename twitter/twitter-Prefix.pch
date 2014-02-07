@@ -15,4 +15,9 @@
     #import <Foundation/Foundation.h>
 #endif
 
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #import "TwitterCommon.h"
+#import "AFNetworking.h"
+#import "UIImageView+AFNetworking.h"
+

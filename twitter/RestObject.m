@@ -18,6 +18,18 @@
     return self;
 }
 
+-(void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:self.data forKey:@"data"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    self = [super init];
+    if (self) {
+        _data = [decoder decodeObjectForKey:@"data"];
+    }
+    return self;
+}
+
 - (id)objectForKey:(id)key {
     return [_data objectForKey:key];
 }
@@ -42,7 +54,7 @@
     return NO;
 }
 
-- (NSMethodSignature*)methodSignatureForSelector:(SEL)selector
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector
 {
     NSMethodSignature *sig = [[self class] instanceMethodSignatureForSelector:selector];
     
